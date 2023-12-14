@@ -6,13 +6,13 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:57:19 by hben-laz          #+#    #+#             */
-/*   Updated: 2023/12/12 15:59:29 by hben-laz         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:05:26 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GIT_NEXT_LINE_H
 # define GIT_NEXT_LINE_H
 
-
+char	*get_next_line(int fd);
 
 #endif

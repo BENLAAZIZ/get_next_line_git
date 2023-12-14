@@ -6,8 +6,13 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:56:37 by hben-laz          #+#    #+#             */
-/*   Updated: 2023/12/12 16:00:27 by hben-laz         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:05:34 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*get_next_line(int fd)
+{
+	
+}
