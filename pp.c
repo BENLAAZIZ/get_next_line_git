@@ -7,16 +7,11 @@ int f(int x)
 }
 int main ()
 {
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
-	printf("%d", f(5));
+	printf("%d   ", f(5));
+	printf("%d   ", f(5));
+	printf("%d   ", f(5));
+	printf("%d   ", f(5));
+	printf("%d   ", f(5));
+	printf("%d   ", f(5));
+	return 0;
 }
