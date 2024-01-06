@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 04:13:50 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/06 16:28:03 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:03:59 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,26 @@ size_t	ft_strlen(const char *s)
 		s++;
 	}
 	return (l);
+}
+void	*ft_memcpy(void	*dst, const void *src, size_t n)
+{
+	unsigned char	*ptr;
+	unsigned char	*c;
+	size_t			i;
+
+	i = 0;
+	if (n == 0)
+		return (dst);
+	ptr = (unsigned char *)dst;
+	c = (unsigned char *)src;
+	if (ptr == NULL && c == NULL)
+		return (dst);
+	while (i < n)
+	{
+		*(ptr + i) = *(c + i);
+		i++;
+	}
+	return (dst);
 }
 
 char	*ft_strdup(const char *s1)
@@ -90,25 +110,32 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char	*get_next_line(int fd)
 {
-    char *buf;
-    char *line = NULL;
-    int n = 0;
+	char static	*buf;
+	char		*buf_save;
+	char		*line;
+	static int	n;
+	static int	nb_read;
+	
     
-    if (fd < 0 || !(buf = (char *)malloc(BUFFER_SIZE + 1)))
-        return NULL;
-
-    while (read(fd, buf, BUFFER_SIZE) > 0)
+	n = 0;
+	line = NULL;
+	if (fd == -1 || (buf = (char *)malloc(BUFFER_SIZE + 1)) < 0)
+		return NULL;
+    while ((nb_read = read(fd, buf, BUFFER_SIZE)) > 0)
     {
-        buf[BUFFER_SIZE] = '\0';
-        if (chek_new_line(buf, &n))
-            break;
-        
-        char *buf_save = ft_strdup(buf);
-        line = ft_strjoin(line, buf_save);
-        free(buf_save);
+		buf[BUFFER_SIZE] = '\0';
+		if (chek_new_line(buf, &n))
+			break ;
+		buf_save = ft_strdup(buf);
+		line = ft_strjoin(line, buf_save);
+		free(buf_save);
     }
-
-    free(buf);
+	if (nb_read < 0)
+		return (NULL);
+	buf_save = ft_strdup(buf);
+	line = ft_strjoin(line, buf_save);
+	free(buf_save);
+	free(buf);
 
     return line;
 }
