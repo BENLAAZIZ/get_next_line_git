@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/08 19:59:31 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/08 23:45:06 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	chek_new_line(char *buf, int *n)
 	int	i;
 
 	i = 0;
+	if(!buf)
+		return 0;
 	while (buf[i])
 	{
 		if (buf[i] == '\n')
@@ -81,7 +83,6 @@ char	*ft_strdup(const char *s1)
 	return (tab);
 }
 
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
@@ -110,22 +111,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (tab);
 }
 
-// char	*ft_strrchr(const char *str, int c)
-// {
-// 	int	len;
-
-// 	len = ft_strlen(str);
-// 	if ((unsigned char)c == '\0' )
-// 		return ((char *)(str + len));
-// 	while (len >= 0)
-// 	{
-// 		if (str[len] == (unsigned char)c)
-// 			return ((char *)(str + len + 1));
-// 		len--;
-// 	}
-// 	return (NULL);
-// }
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	s_len;
@@ -141,7 +126,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	substr_len = len;
 	if (start + substr_len > s_len) 
-		substr_len = s_len - start;
+		substr_len = s_len - start + 1;
 	substr = (char *)malloc((substr_len + 1) * sizeof(char));
 	if (substr == NULL)
 		return (NULL);
@@ -153,15 +138,35 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substr[substr_len] = '\0';
 	return (substr);
 }
+char	*read_function(int nb_read, char **buf, char **buf_save, char *tmp, int n ,int fd)
+{
+	while (nb_read > 0)
+	{
+		nb_read = read(fd, *buf, BUFFER_SIZE);
+		if (nb_read == 0 && *buf_save == 0)
+			return (free (*buf) ,*buf = NULL,NULL);
+		if (nb_read == 0)
+			break ;
+		if (nb_read < 0)
+			return (free(*buf_save), free(*buf), *buf_save = 0,*buf = NULL, NULL);
+		*buf[nb_read] = '\0';
+		tmp = *buf_save;
+		*buf_save = ft_strjoin(*buf_save,*buf);
+		free(tmp);
+		if (chek_new_line(*buf, &n))
+			break ;
+	}
+	return *buf_save;
+}
 
 char	*get_next_line(int fd)
 {
 	char		*buf;
 	char static	*buf_save;
+	char		*tmp;
 	char		*line;
 	int			n;
 	int			nb_read;
-	char		*tmp;
 
 	n = 0;
 	line = NULL;
@@ -169,28 +174,14 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE + 1);
 	if (buf == 0)
 		return (free(buf_save), buf_save = 0, NULL);
-    while (nb_read > 0)
-    {
-		nb_read = read(fd, buf, BUFFER_SIZE);
-		if (nb_read == 0 && buf_save == 0)
-			return (free (buf) ,buf = NULL,NULL);
-		if (nb_read == 0)
-			break ;
-		if (nb_read < 0)
-			return (free(buf_save), free(buf), buf_save = 0,buf = NULL, NULL);
-		buf[nb_read] = '\0';
-		tmp = buf_save;
-		buf_save = ft_strjoin(buf_save,buf);
-		free(tmp);
-		if (chek_new_line(buf, &n))
-			break ;
-    }
-	free(buf);
+	buf_save = read_function(nb_read, &buf, &buf_save, tmp, n, fd);
+	free (buf);
 	chek_new_line(buf_save, &n);
 	line = ft_substr(buf_save,0,n+1);
 	tmp = buf_save;
 	buf_save = ft_substr(buf_save,n+1,ft_strlen(buf_save));
-	free(tmp);
+	puts("rrrrrrr");
+	free (tmp);
 	tmp = NULL;
-    return line;
+	return (line);
 }
