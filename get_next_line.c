@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/08 23:45:06 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:29:27 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	chek_new_line(char *buf, int *n)
 
 	i = 0;
 	if(!buf)
-		return 0;
+		return (0);
 	while (buf[i])
 	{
 		if (buf[i] == '\n')
@@ -82,7 +82,6 @@ char	*ft_strdup(const char *s1)
 	tab[size] = '\0';
 	return (tab);
 }
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
@@ -126,7 +125,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	substr_len = len;
 	if (start + substr_len > s_len) 
-		substr_len = s_len - start + 1;
+		substr_len = s_len - start;
 	substr = (char *)malloc((substr_len + 1) * sizeof(char));
 	if (substr == NULL)
 		return (NULL);
@@ -138,25 +137,31 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substr[substr_len] = '\0';
 	return (substr);
 }
-char	*read_function(int nb_read, char **buf, char **buf_save, char *tmp, int n ,int fd)
+
+char	*read_function(char **buf, char *buf_save, int n ,int fd)
 {
+	int			nb_read;
+	char		*tmp;
+
+	nb_read = 1;
 	while (nb_read > 0)
 	{
 		nb_read = read(fd, *buf, BUFFER_SIZE);
-		if (nb_read == 0 && *buf_save == 0)
-			return (free (*buf) ,*buf = NULL,NULL);
+		if (nb_read == 0 && buf_save == 0)
+			return (free(*buf) , *buf = NULL, NULL);
 		if (nb_read == 0)
 			break ;
 		if (nb_read < 0)
-			return (free(*buf_save), free(*buf), *buf_save = 0,*buf = NULL, NULL);
-		*buf[nb_read] = '\0';
-		tmp = *buf_save;
-		*buf_save = ft_strjoin(*buf_save,*buf);
+			return (free(buf_save), free(*buf), buf_save = NULL, *buf = NULL, NULL);
+		(*buf)[nb_read] = '\0';
+		tmp = buf_save;
+		buf_save = ft_strjoin(buf_save, *buf);
 		free(tmp);
 		if (chek_new_line(*buf, &n))
 			break ;
 	}
-	return *buf_save;
+	// free(*buf);
+	return (buf_save);
 }
 
 char	*get_next_line(int fd)
@@ -166,22 +171,20 @@ char	*get_next_line(int fd)
 	char		*tmp;
 	char		*line;
 	int			n;
-	int			nb_read;
+	
 
 	n = 0;
 	line = NULL;
-	nb_read = 1;
 	buf = malloc(BUFFER_SIZE + 1);
 	if (buf == 0)
-		return (free(buf_save), buf_save = 0, NULL);
-	buf_save = read_function(nb_read, &buf, &buf_save, tmp, n, fd);
-	free (buf);
+		return (free(buf_save), buf_save = NULL, NULL);
+	buf_save = read_function(&buf, buf_save, n, fd);
 	chek_new_line(buf_save, &n);
-	line = ft_substr(buf_save,0,n+1);
+	free(buf);
+	line = ft_substr(buf_save, 0, n + 1);
 	tmp = buf_save;
-	buf_save = ft_substr(buf_save,n+1,ft_strlen(buf_save));
-	puts("rrrrrrr");
+	if (buf_save != NULL)
+		buf_save = ft_substr(buf_save, n + 1, ft_strlen(buf_save));
 	free (tmp);
-	tmp = NULL;
 	return (line);
 }
