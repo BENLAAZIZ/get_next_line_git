@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:26 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/10 10:02:54 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:29:08 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	l;
 
+	if (!s)
+		return (0);
 	l = 0;
 	while (*s != '\0')
 	{
