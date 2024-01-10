@@ -6,109 +6,11 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/09 17:29:27 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:04:12 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-
-int	chek_new_line(char *buf, int *n)
-{
-	int	i;
-
-	i = 0;
-	if(!buf)
-		return (0);
-	while (buf[i])
-	{
-		if (buf[i] == '\n')
-		{
-			*n = i;
-			return (1);
-		}
-		i++;
-		*n = i;
-	}
-	return (0);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	l;
-
-	l = 0;
-	while (*s != '\0')
-	{
-		l++;
-		s++;
-	}
-	return (l);
-}
-void	*ft_memcpy(void	*dst, const void *src, size_t n)
-{
-	unsigned char	*ptr;
-	unsigned char	*c;
-	size_t			i;
-
-	i = 0;
-	if (n == 0)
-		return (dst);
-	ptr = (unsigned char *)dst;
-	c = (unsigned char *)src;
-	if (ptr == NULL && c == NULL)
-		return (dst);
-	while (i < n)
-	{
-		*(ptr + i) = *(c + i);
-		i++;
-	}
-	return (dst);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t	size;
-	char	*tab;
-
-	if (!s1)
-		return (NULL);
-	size = ft_strlen(s1);
-	tab = (char *)malloc(sizeof(char) * (size + 1));
-	if (tab == NULL)
-		return (NULL);
-	if (size > 0)
-		ft_memcpy(tab, s1, size);
-	tab[size] = '\0';
-	return (tab);
-}
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*tab;
-
-	i = 0;
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	if (s1 == NULL)
-		return (ft_strdup(s2));
-	if (s2 == NULL)
-		return (ft_strdup(s1));
-	tab = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char)); 
-	if (tab == NULL)
-		return (NULL);
-	while (i < ft_strlen(s1))
-	{
-		tab[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < ft_strlen(s2))
-		tab[i++] = s2[j++];
-	tab[i] = '\0';
-	return (tab);
-}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -136,6 +38,26 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	substr[substr_len] = '\0';
 	return (substr);
+}
+
+int	chek_new_line(char *buf, int *n)
+{
+	int	i;
+
+	i = 0;
+	if(!buf)
+		return (0);
+	while (buf[i])
+	{
+		if (buf[i] == '\n')
+		{
+			*n = i;
+			return (1);
+		}
+		i++;
+		*n = i;
+	}
+	return (0);
 }
 
 char	*read_function(char **buf, char *buf_save, int n ,int fd)
