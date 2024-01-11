@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/11 16:42:28 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:47:13 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static char	*read_function(char **buf, char *buf_save, int n ,int fd)
 	while (nb_read > 0)
 	{
 		nb_read = read(fd, *buf, BUFFER_SIZE);
-		//printf("rrrrr\n");
 		if (nb_read == 0 && buf_save == 0)
 			return (free(*buf) , *buf = NULL, NULL);
 		if (nb_read == 0)
@@ -89,6 +88,15 @@ static char	*read_function(char **buf, char *buf_save, int n ,int fd)
 	return (buf_save);
 }
 
+static char *free_function(char **buf_save, int fd, char **buf)
+{
+		if(fd > 0 && fd < 10240)
+		{
+			free(buf_save[fd]);
+			buf_save[fd] = 0;
+		}
+		return (free(*buf), *buf = NULL, NULL);
+}
 char	*get_next_line(int fd)
 {
 	char		*buf;
@@ -100,21 +108,24 @@ char	*get_next_line(int fd)
 	n = 0;
 	line = NULL;
 	buf = malloc(BUFFER_SIZE + 1);
-	if (buf == 0 || fd < 0 || read(fd,buf,0) < 0 )
+	//puts("hgsgn");
+	if (buf == 0 || fd < 0 || read(fd,buf,0) < 0)
 	{
-		if(fd > 0)
-		{
-			free(buf_save[fd]);
-			buf_save[fd] = 0;
-		}
-		return (free(buf), NULL);
+		return (free_function(buf_save, fd, &buf));
+		// if(fd > 0 && fd < 10240)
+		// {
+		// 	free(buf_save[fd]);
+		// 	buf_save[fd] = 0;
+		// }
+		// return (free(buf), NULL);
 	}
 	buf_save[fd] = read_function(&buf, buf_save[fd], n, fd);
-	free(buf);
+	if (buf_save[fd])
+		free(buf);
 	chek_new_line(buf_save[fd], &n);
 	line = ft_substr(buf_save[fd], 0, n + 1);
 	if (line == NULL)
-		return (free(buf_save[fd]), buf_save[fd] = 0,free(buf), NULL);
+		return (free(buf_save[fd]), buf_save[fd] = 0, NULL);
 	tmp = buf_save[fd];
 	if (buf_save[fd] != NULL)
 		buf_save[fd] = ft_substr(buf_save[fd], n + 1, ft_strlen(buf_save[fd]));
