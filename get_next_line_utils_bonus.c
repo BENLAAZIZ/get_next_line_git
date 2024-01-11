@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/14 13:06:26 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/10 10:23:42 by hben-laz         ###   ########.fr       */
+/*   Created: 2024/01/10 11:30:08 by hben-laz          #+#    #+#             */
+/*   Updated: 2024/01/10 17:15:33 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	l;
 
-	l = 0;
 	if (!s)
-		return (NULL);
+		return (0);
+	l = 0;
 	while (*s != '\0')
 	{
 		l++;
@@ -26,7 +26,6 @@ size_t	ft_strlen(const char *s)
 	}
 	return (l);
 }
-
 void	*ft_memcpy(void	*dst, const void *src, size_t n)
 {
 	unsigned char	*ptr;
@@ -52,8 +51,9 @@ char	*ft_strdup(const char *s1)
 {
 	size_t	size;
 	char	*tab;
-	if(!s1)
-		return NULL;
+
+	if (!s1)
+		return (NULL);
 	size = ft_strlen(s1);
 	tab = (char *)malloc(sizeof(char) * (size + 1));
 	if (tab == NULL)
@@ -63,7 +63,6 @@ char	*ft_strdup(const char *s1)
 	tab[size] = '\0';
 	return (tab);
 }
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
