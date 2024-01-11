@@ -6,11 +6,12 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/10 22:36:48 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/11 16:42:28 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+#include <stdio.h>
 
 static char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -43,8 +44,9 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 static int	chek_new_line(char *buf, int *n)
 {
 	int	i;
-
 	i = 0;
+	if(!buf)
+		return 0;
 	while (buf[i])
 	{
 		if (buf[i] == '\n')
@@ -68,26 +70,28 @@ static char	*read_function(char **buf, char *buf_save, int n ,int fd)
 	while (nb_read > 0)
 	{
 		nb_read = read(fd, *buf, BUFFER_SIZE);
+		//printf("rrrrr\n");
 		if (nb_read == 0 && buf_save == 0)
 			return (free(*buf) , *buf = NULL, NULL);
 		if (nb_read == 0)
 			break ;
 		if (nb_read < 0)
-			return (free(buf_save[fd]), free(*buf), buf_save = NULL, *buf = NULL, NULL);
+			return (free(buf_save), free(*buf), buf_save = NULL, *buf = NULL, NULL);
 		(*buf)[nb_read] = '\0';
-		tmp = buf_save[fd];
+		tmp = buf_save;
 		buf_save = ft_strjoin(buf_save, *buf);
+		if (buf_save == NULL)
+			return (free(tmp),free(*buf), NULL);
 		free(tmp);
 		if (chek_new_line(*buf, &n))
 			break ;
 	}
-	
-	return (buf_save[fd]);
+	return (buf_save);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buf = NULL;
+	char		*buf;
 	char static	*buf_save[10240];
 	char		*line;
 	int			n;
@@ -96,17 +100,24 @@ char	*get_next_line(int fd)
 	n = 0;
 	line = NULL;
 	buf = malloc(BUFFER_SIZE + 1);
-	if (buf == 0 || fd < 0)
-		return (NULL);
-	if (read(fd,buf,0) < 0 )
-		return (free(*buf_save[fd]), *buf_save[fd] = 0,free(buf) ,NULL);
-	*buf_save[fd] = read_function(&buf, *buf_save[fd], n, fd);
+	if (buf == 0 || fd < 0 || read(fd,buf,0) < 0 )
+	{
+		if(fd > 0)
+		{
+			free(buf_save[fd]);
+			buf_save[fd] = 0;
+		}
+		return (free(buf), NULL);
+	}
+	buf_save[fd] = read_function(&buf, buf_save[fd], n, fd);
 	free(buf);
-	chek_new_line(*buf_save[fd], &n);
-	line = ft_substr(*buf_save[fd], 0, n + 1);
-	tmp = *buf_save[fd];
-	if (buf_save != NULL)
-		*buf_save[fd] = ft_substr(*buf_save[fd], n + 1, ft_strlen(*buf_save[fd]));
+	chek_new_line(buf_save[fd], &n);
+	line = ft_substr(buf_save[fd], 0, n + 1);
+	if (line == NULL)
+		return (free(buf_save[fd]), buf_save[fd] = 0,free(buf), NULL);
+	tmp = buf_save[fd];
+	if (buf_save[fd] != NULL)
+		buf_save[fd] = ft_substr(buf_save[fd], n + 1, ft_strlen(buf_save[fd]));
 	free(tmp);
 	tmp = NULL;
     return line;
