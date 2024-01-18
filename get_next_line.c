@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/11 23:43:38 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:33:44 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ char	*get_next_line(int fd)
 	int			n;
 
 	n = 0;
-	line = NULL;
-	buf = malloc(BUFFER_SIZE + 1);
+	buf = malloc(BUFFER_SIZE * sizeof(char) + 1);
 	if (buf == 0)
 		return (free(buf_save), buf_save = NULL, NULL);
 	buf_save = read_function(&buf, buf_save, n, fd);

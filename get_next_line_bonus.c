@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/11 23:55:49 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:35:04 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,16 @@ static char	*read_function(char **buf, char *buf_save, int n, int fd)
 	return (buf_save);
 }
 
-static char	*free_function(char **buf_save, int fd, char **buf)
+static char	*free_function(char **buf_save, int fd, char *buf)
 {
 	if (fd > 0 && fd < 10240)
 	{
 		free(buf_save[fd]);
 		buf_save[fd] = 0;
 	}
-	return (free(*buf), *buf = NULL, NULL);
+	free(buf);
+	buf = NULL;
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -107,10 +109,9 @@ char	*get_next_line(int fd)
 	char		*tmp;
 
 	n = 0;
-	line = NULL;
-	buf = malloc(BUFFER_SIZE + 1);
+	buf = malloc(BUFFER_SIZE * sizeof(char) + 1);
 	if (buf == 0 || fd < 0 || read(fd, buf, 0) < 0)
-		return (free_function(buf_save, fd, &buf));
+		return (free_function(buf_save, fd, buf));
 	buf_save[fd] = read_function(&buf, buf_save[fd], n, fd);
 	if (buf_save[fd])
 		free(buf);
