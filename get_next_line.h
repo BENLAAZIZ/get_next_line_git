@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:42 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/18 17:58:18 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/18 23:18:08 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # endif
 
 # include <unistd.h>
-# include <string.h>
 # include <stdlib.h>
 # include <fcntl.h>
 
