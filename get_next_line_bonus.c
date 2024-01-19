@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/18 23:15:22 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/19 23:39:29 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*read_function(char **buf, char *buf_save, int n, int fd)
 		if (buf_save == NULL)
 			return (free(tmp), free(*buf), NULL);
 		free(tmp);
-		if (chek_new_line(*buf, &n))
+		if (chek_new_line(*buf_save, &n))
 			break ;
 	}
 	return (buf_save);
@@ -93,7 +93,7 @@ static char	*free_function(char **buf_save, int fd, char *buf)
 	if (fd > 0 && fd < 10240)
 	{
 		free(buf_save[fd]);
-		buf_save[fd] = 0;
+		buf_save[fd] = NULL;
 	}
 	free(buf);
 	buf = NULL;
@@ -118,7 +118,7 @@ char	*get_next_line(int fd)
 	chek_new_line(buf_save[fd], &n);
 	line = ft_substr(buf_save[fd], 0, n + 1);
 	if (line == NULL)
-		return (free(buf_save[fd]), buf_save[fd] = 0, NULL);
+		return (free(buf_save[fd]), buf_save[fd] = NULL, NULL);
 	tmp = buf_save[fd];
 	if (buf_save[fd] != NULL)
 		buf_save[fd] = ft_substr(buf_save[fd], n + 1, ft_strlen(buf_save[fd]));

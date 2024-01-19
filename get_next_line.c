@@ -6,7 +6,7 @@
 /*   By: hben-laz <hben-laz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 13:06:00 by hben-laz          #+#    #+#             */
-/*   Updated: 2024/01/18 17:33:44 by hben-laz         ###   ########.fr       */
+/*   Updated: 2024/01/19 22:46:08 by hben-laz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static char	*read_function(char **buf, char *buf_save, int n, int fd)
 			return (free(tmp), NULL);
 		free (tmp);
 		tmp = NULL;
-		if (chek_new_line(*buf, &n))
+		if (chek_new_line(buf_save, &n))
 			break ;
 	}
 	return (buf_save);
@@ -106,7 +106,7 @@ char	*get_next_line(int fd)
 	chek_new_line(buf_save, &n);
 	line = ft_substr(buf_save, 0, n + 1);
 	if (line == NULL)
-		return (free(buf_save), buf_save = 0, NULL);
+		return (free(buf_save), buf_save = NULL, NULL);
 	tmp = buf_save;
 	if (buf_save != NULL)
 		buf_save = ft_substr(buf_save, n + 1, ft_strlen(buf_save));
